@@ -1,7 +1,10 @@
 import { StyleSheet, Text, View } from "react-native";
 import { useState, useEffect } from "react";
 import { TextInput } from "react-native-paper";
-import { Picker } from "@react-native-picker/picker";
+
+import CurveDb from "../data/CurveDB";
+import Reciprocity from "../data/Reciprocity";
+import DropDown from "react-native-paper-dropdown";
 
 const validNumber = (val: string | undefined): boolean => {
   if (val === undefined) {
@@ -15,27 +18,13 @@ const validNumber = (val: string | undefined): boolean => {
   );
 };
 
-type ReciprocityCurves = "foma100" | "foma200" | "tmax100" | "none";
-
-// https://www.magnaimages.com/post/foma-fomapan-100-reciprocity-failure-charts
-// https://www.flickr.com/photos/janokelly/6804638225/
-const curveDb = {
-  foma100: (n: number): number =>
-    n * (Math.pow(Math.log10(n), 2) + 5 * Math.log10(n) + 2),
-  foma200: (n: number): number =>
-    n * (1.5 * Math.pow(Math.log10(n), 2) + 4.5 * Math.log10(n) + 3),
-  tmax100: (n: number): number =>
-    n * ((1 / 6) * Math.pow(Math.log10(n), 2) + 4 / 3),
-  none: (n: number): number => n,
-};
-
 const ExposureCalculator = () => {
   const [focalLength, setFocalLength] = useState("200");
   const [bellowsLength, setBellowsLength] = useState("");
   const [exposureComp, setExposureComp] = useState("");
   const [baseExposureSeconds, setBaseExposureSecondes] = useState("");
-  const [reciprocityCurve, setReciprocityCurve] =
-    useState<ReciprocityCurves>("tmax100");
+  const [reciprocityCurve, setReciprocityCurve] = useState<Reciprocity>("none");
+  const [showDropDown, setShowDropDown] = useState<boolean>(false);
   const [adjustedExposure, setAdjustedExposure] = useState("-");
 
   useEffect(() => {
@@ -61,15 +50,11 @@ const ExposureCalculator = () => {
       const stops: number =
         fl > 0 && bl > 0 && bl >= fl ? Math.log2(Math.pow(bl / fl, 2.0)) : 0;
       const bellowsAdjustedSeconds = seconds * Math.pow(2, stops);
-      const curve = curveDb[reciprocityCurve];
+      const curve = CurveDb[reciprocityCurve];
 
       setAdjustedExposure(
         curve(bellowsAdjustedSeconds).toFixed(2) + " seconds"
       );
-      /**
-       * Check all data is good
-       * Calculate exposure comp
-       */
     } else {
       setAdjustedExposure("-");
     }
@@ -78,16 +63,23 @@ const ExposureCalculator = () => {
   const style = StyleSheet.create({
     container: {
       backgroundColor: "#fff",
-      alignItems: "center",
+      alignItems: "stretch",
       justifyContent: "center",
+      verticalAlign: "top",
       flexGrow: 1,
-      width: "99%",
+      width: "75%",
     },
-    text: { width: 300 },
+    header: {
+      fontSize: 16,
+      paddingBottom: 10,
+      fontWeight: "600",
+    },
+    text: { marginBottom: 10 },
   });
 
   return (
     <View style={style.container}>
+      <Text style={style.header}>Exposure Buddy</Text>
       <TextInput
         label="Focal Length"
         value={focalLength}
@@ -102,7 +94,7 @@ const ExposureCalculator = () => {
       />
 
       <TextInput
-        label="Exposure Comp"
+        label="Bellows Exposure Comp"
         style={style.text}
         value={exposureComp}
         disabled={true}
@@ -116,20 +108,28 @@ const ExposureCalculator = () => {
         onChangeText={(text) => setBaseExposureSecondes(text)}
       />
 
-      <Picker
-        selectedValue={reciprocityCurve}
-        style={style.text}
-        onValueChange={(itemValue, itemIndex) => setReciprocityCurve(itemValue)}
-      >
-        <Picker.Item label="Foma 100" value="foma100" />
-        <Picker.Item label="Foma 200" value="foma200" />
-        <Picker.Item label="TMax100" value="tmax100" />
-        <Picker.Item label="None" value="none" />
-      </Picker>
+      <DropDown
+        label="Reciprocity Curve / Film"
+        mode={"outlined"}
+        dropDownStyle={style.text}
+        visible={showDropDown}
+        showDropDown={() => setShowDropDown(true)}
+        onDismiss={() => setShowDropDown(false)}
+        value={reciprocityCurve}
+        setValue={setReciprocityCurve}
+        list={[
+          { label: "Foma 100", value: "foma100" },
+          { label: "Foma 200", value: "foma200" },
+          { label: "TMax 100", value: "tmax100" },
+          { label: "TMax 400", value: "tmax400" },
+          { label: "Fujicolor 100", value: "fujicolor100" },
+          { label: "None", value: "none" },
+        ]}
+      ></DropDown>
 
       <TextInput
         label="Adjusted Exposure"
-        style={style.text}
+        style={{ ...style.text, marginTop: 10 }}
         value={adjustedExposure}
         disabled={true}
       />

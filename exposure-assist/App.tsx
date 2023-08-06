@@ -1,7 +1,8 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import ExposureCalculator from "./components/ExposureCalculator";
-import { PaperProvider } from "react-native-paper";
+import { DefaultTheme, PaperProvider } from "react-native-paper";
+import Theme from "./theme/Theme";
 
 const styles = StyleSheet.create({
   container: {
@@ -10,19 +11,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     flexGrow: 1,
-    width: "99%"
-  },
-  header: {
-    fontSize: 16,
-    paddingBottom: 10,
+    width: "99%",
   },
 });
 
+const theme = {
+  ...DefaultTheme,
+  colors: Theme.lightMode.colors
+};
 export default function App() {
   return (
-    <PaperProvider>
+    <PaperProvider theme={theme}>
       <View style={styles.container}>
-        <Text style={styles.header}>Exposure Buddy</Text>
         <ExposureCalculator />
         <StatusBar style="auto" />
       </View>
