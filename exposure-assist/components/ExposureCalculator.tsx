@@ -1,4 +1,4 @@
-import { Text } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { useState, useEffect } from "react";
 import { TextInput } from "react-native-paper";
 import { Picker } from "@react-native-picker/picker";
@@ -63,7 +63,9 @@ const ExposureCalculator = () => {
       const bellowsAdjustedSeconds = seconds * Math.pow(2, stops);
       const curve = curveDb[reciprocityCurve];
 
-      setAdjustedExposure(curve(bellowsAdjustedSeconds).toFixed(2) + " seconds");
+      setAdjustedExposure(
+        curve(bellowsAdjustedSeconds).toFixed(2) + " seconds"
+      );
       /**
        * Check all data is good
        * Calculate exposure comp
@@ -72,30 +74,51 @@ const ExposureCalculator = () => {
       setAdjustedExposure("-");
     }
   }, [focalLength, bellowsLength, baseExposureSeconds, reciprocityCurve]);
+
+  const style = StyleSheet.create({
+    container: {
+      backgroundColor: "#fff",
+      alignItems: "center",
+      justifyContent: "center",
+      flexGrow: 1,
+      width: "99%",
+    },
+    text: { width: 300 },
+  });
+
   return (
-    <>
+    <View style={style.container}>
       <TextInput
         label="Focal Length"
         value={focalLength}
+        style={style.text}
         onChangeText={(text) => setFocalLength(text)}
       />
       <TextInput
         label="Bellows Draw"
         value={bellowsLength}
+        style={style.text}
         onChangeText={(text) => setBellowsLength(text)}
       />
 
-      <TextInput label="Exposure Comp" value={exposureComp} disabled={true} />
+      <TextInput
+        label="Exposure Comp"
+        style={style.text}
+        value={exposureComp}
+        disabled={true}
+      />
 
       <TextInput
         label="Base Exposure (seconds)"
         value={baseExposureSeconds}
+        style={style.text}
         placeholder="Exposure in seconds before correction"
         onChangeText={(text) => setBaseExposureSecondes(text)}
       />
 
       <Picker
         selectedValue={reciprocityCurve}
+        style={style.text}
         onValueChange={(itemValue, itemIndex) => setReciprocityCurve(itemValue)}
       >
         <Picker.Item label="Foma 100" value="foma100" />
@@ -106,10 +129,11 @@ const ExposureCalculator = () => {
 
       <TextInput
         label="Adjusted Exposure"
+        style={style.text}
         value={adjustedExposure}
         disabled={true}
       />
-    </>
+    </View>
   );
 };
 

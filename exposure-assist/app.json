@@ -26,6 +26,12 @@
     "web": {
       "bundler": "metro",
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "59d20d95-5d9d-4860-a5e4-e3da88be155f"
+      }
+    },
+    "owner": "bobbotron"
   }
 }
