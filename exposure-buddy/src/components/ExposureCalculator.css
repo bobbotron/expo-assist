@@ -6,8 +6,20 @@ input,
 select {
   margin-bottom: 0px;
   display: block;
+  width: 95%;
+}
+h3 {
+  margin-top: 0px;
 }
 
 .exposure-calc {
-    margin-left: 10px;
+    max-width: 500px;
+    width: 100%;
+    margin: 10px;
+    border: 1px;
+    border-color: black;
+    border-width: 1;
+    border-style: solid;
+    padding: 10px;
+    border-radius: 5px;
 }
