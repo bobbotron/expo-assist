@@ -1,0 +1,13 @@
+label {
+  font-weight: 500;
+}
+
+input,
+select {
+  margin-bottom: 0px;
+  display: block;
+}
+
+.exposure-calc {
+    margin-left: 10px;
+}
