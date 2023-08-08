@@ -2,14 +2,16 @@ interface NumericInputProps {
   label: string;
   value: string;
   update: (s: string) => void;
+  labelClass?: string;
 }
 const NumbericInput: React.FC<NumericInputProps> = ({
   label,
   value,
   update,
+  labelClass,
 }) => (
   <>
-    <label>
+    <label className={labelClass}>
       {label}{" "}
       <input
         type="number"

@@ -10,16 +10,27 @@ select {
 }
 h3 {
   margin-top: 0px;
+  margin-bottom: 5px;
 }
 
+p.description {
+  margin-top: 0px;
+  font-size: small;
+}
+label.corrected-exposure {
+  font-size: large;
+}
+label.corrected-exposure input {
+  font-size: large;
+}
 .exposure-calc {
-    max-width: 400px;
-    width: 70%;
-    margin: 10px;
-    border: 1px;
-    border-color: gray;
-    border-style: solid;
-    padding: 10px;
-    border-radius: 15px;
-    border-width:2px;
+  max-width: 400px;
+  width: 70%;
+  margin: 10px;
+  border: 1px;
+  border-color: gray;
+  border-style: solid;
+  padding: 10px;
+  border-radius: 15px;
+  border-width: 2px;
 }

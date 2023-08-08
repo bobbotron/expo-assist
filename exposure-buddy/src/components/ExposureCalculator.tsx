@@ -61,6 +61,7 @@ const ExposureCalculator = () => {
   return (
     <div className="exposure-calc">
       <h3>Exposure Buddy</h3>
+      <p className="description">Simple calculator for bellows exposure related calculations</p>
       <NumbericInput
         label="Focal Length"
         value={focalLength}
@@ -99,7 +100,7 @@ const ExposureCalculator = () => {
         </select>
       </label>
       <br />
-      <label>
+      <label className="corrected-exposure">
         Corrected Exposure
         <input type="text" value={adjustedExposure} disabled={true} />
       </label>
