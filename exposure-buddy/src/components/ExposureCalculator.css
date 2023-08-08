@@ -1,3 +1,9 @@
+span.exposure-calc-container {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+
 label {
   font-weight: 500;
 }

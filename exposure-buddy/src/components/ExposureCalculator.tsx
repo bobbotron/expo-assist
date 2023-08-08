@@ -64,54 +64,56 @@ const ExposureCalculator = () => {
   }, [focalLength, bellowsLength, baseExposureSeconds, reciprocityCurve]);
 
   return (
-    <div className="exposure-calc">
-      <h3>Exposure Buddy</h3>
-      <p className="description">
-        Simple calculator for bellows exposure related calculations
-      </p>
-      <NumbericInput
-        label="Focal Length"
-        value={focalLength}
-        update={setFocalLength}
-      />
+    <span className="exposure-calc-container">
+      <div className="exposure-calc">
+        <h3>Exposure Buddy</h3>
+        <p className="description">
+          Simple calculator for bellows exposure related calculations
+        </p>
+        <NumbericInput
+          label="Focal Length"
+          value={focalLength}
+          update={setFocalLength}
+        />
 
-      <NumbericInput
-        label="Bellows Length"
-        value={bellowsLength}
-        update={setBellowsLength}
-      />
+        <NumbericInput
+          label="Bellows Length"
+          value={bellowsLength}
+          update={setBellowsLength}
+        />
 
-      <label>
-        Bellows Exposure Comp
-        <input type="text" value={exposureComp} disabled={true} />
-      </label>
-      <br />
+        <label>
+          Bellows Exposure Comp
+          <input type="text" value={exposureComp} disabled={true} />
+        </label>
+        <br />
 
-      <NumbericInput
-        label="Base Exposure (seconds)"
-        value={baseExposureSeconds}
-        update={setBaseExposureSecondes}
-      />
+        <NumbericInput
+          label="Base Exposure (seconds)"
+          value={baseExposureSeconds}
+          update={setBaseExposureSecondes}
+        />
 
-      <label>
-        Reciprocity Curve
-        <select
-          value={reciprocityCurve}
-          onChange={(e) => setReciprocityCurve(e.target.value as Reciprocity)}
-        >
-          {Object.keys(CurveDb).map((key, index) => (
-            <option value={key} key={key}>
-              {CurveDb[key as Reciprocity].name}
-            </option>
-          ))}
-        </select>
-      </label>
-      <br />
-      <label className="corrected-exposure">
-        Corrected Exposure
-        <input type="text" value={adjustedExposure} disabled={true} />
-      </label>
-    </div>
+        <label>
+          Reciprocity Curve
+          <select
+            value={reciprocityCurve}
+            onChange={(e) => setReciprocityCurve(e.target.value as Reciprocity)}
+          >
+            {Object.keys(CurveDb).map((key, index) => (
+              <option value={key} key={key}>
+                {CurveDb[key as Reciprocity].name}
+              </option>
+            ))}
+          </select>
+        </label>
+        <br />
+        <label className="corrected-exposure">
+          Corrected Exposure
+          <input type="text" value={adjustedExposure} disabled={true} />
+        </label>
+      </div>
+    </span>
   );
 };
 
