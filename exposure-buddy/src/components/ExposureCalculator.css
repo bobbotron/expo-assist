@@ -17,9 +17,9 @@ h3 {
     width: 70%;
     margin: 10px;
     border: 1px;
-    border-color: black;
-    border-width: 1;
+    border-color: gray;
     border-style: solid;
     padding: 10px;
-    border-radius: 5px;
+    border-radius: 15px;
+    border-width:2px;
 }
