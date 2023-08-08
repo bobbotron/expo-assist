@@ -50,8 +50,13 @@ const ExposureCalculator = () => {
       const bellowsAdjustedSeconds = seconds * Math.pow(2, stops);
       const curve = CurveDb[reciprocityCurve];
 
+      const totalAdjustedTime = curve.curve(bellowsAdjustedSeconds);
+      const bellowsMinutes = Math.floor(totalAdjustedTime / 60);
+      const bellowSeconds = totalAdjustedTime - bellowsMinutes * 60;
       setAdjustedExposure(
-        curve.curve(bellowsAdjustedSeconds).toFixed(2) + " seconds"
+        (bellowsMinutes > 0 ? bellowsMinutes + " minutes, " : "") +
+          bellowSeconds.toFixed(2) +
+          " seconds"
       );
     } else {
       setAdjustedExposure("-");
@@ -61,7 +66,9 @@ const ExposureCalculator = () => {
   return (
     <div className="exposure-calc">
       <h3>Exposure Buddy</h3>
-      <p className="description">Simple calculator for bellows exposure related calculations</p>
+      <p className="description">
+        Simple calculator for bellows exposure related calculations
+      </p>
       <NumbericInput
         label="Focal Length"
         value={focalLength}
