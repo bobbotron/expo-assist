@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import CurveDb from "../data/CurveDB";
 import Reciprocity from "../data/Reciprocity";
 import NumbericInput from "./NumericInput";
-import './ExposureCalculator.css';
+import "./ExposureCalculator.css";
 
 const validNumber = (val: string | undefined): boolean => {
   if (val === undefined) {
@@ -18,7 +18,7 @@ const validNumber = (val: string | undefined): boolean => {
 };
 
 const ExposureCalculator = () => {
-  const [focalLength, setFocalLength] = useState("200");
+  const [focalLength, setFocalLength] = useState("");
   const [bellowsLength, setBellowsLength] = useState("");
   const [exposureComp, setExposureComp] = useState("");
   const [baseExposureSeconds, setBaseExposureSecondes] = useState("");
@@ -58,7 +58,6 @@ const ExposureCalculator = () => {
     }
   }, [focalLength, bellowsLength, baseExposureSeconds, reciprocityCurve]);
 
-
   return (
     <div className="exposure-calc">
       <h3>Exposure Buddy</h3>
@@ -91,34 +90,15 @@ const ExposureCalculator = () => {
         <select
           value={reciprocityCurve}
           onChange={(e) => setReciprocityCurve(e.target.value as Reciprocity)}
-          
         >
           {Object.keys(CurveDb).map((key, index) => (
             <option value={key} key={key}>
-              {key}
+              {CurveDb[key as Reciprocity].name}
             </option>
           ))}
         </select>
       </label>
       <br />
-      {/* <DropDown
-        label="Reciprocity Curve / Film"
-        mode={"outlined"}
-        dropDownStyle={style.text}
-        visible={showDropDown}
-        showDropDown={() => setShowDropDown(true)}
-        onDismiss={() => setShowDropDown(false)}
-        value={reciprocityCurve}
-        setValue={setReciprocityCurve}
-        list={[
-          { label: "Foma 100", value: "foma100" },
-          { label: "Foma 200", value: "foma200" },
-          { label: "TMax 100", value: "tmax100" },
-          { label: "TMax 400", value: "tmax400" },
-          { label: "Fujicolor 100", value: "fujicolor100" },
-          { label: "None", value: "none" },
-        ]}
-      ></DropDown> */}
       <label>
         Corrected Exposure
         <input type="text" value={adjustedExposure} disabled={true} />
