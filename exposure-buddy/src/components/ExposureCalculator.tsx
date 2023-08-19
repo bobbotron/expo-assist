@@ -1,9 +1,19 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 import CurveDb from "../data/CurveDB";
 import Reciprocity from "../data/Reciprocity";
-import NumbericInput from "./NumericInput";
 import "./ExposureCalculator.css";
+
+import {
+  Form,
+  Grid,
+  Header,
+  HeaderSubheader,
+  Message,
+  Segment,
+} from "semantic-ui-react";
+import NumbericInput from "./NumericInput";
+import { bellowsStopAdjustment } from "../algorithms/BellowsMath";
 
 const validNumber = (val: string | undefined): boolean => {
   if (val === undefined) {
@@ -30,7 +40,7 @@ const ExposureCalculator = () => {
       const fl: number = Number(focalLength);
       const bl: number = Number(bellowsLength);
       if (fl > 0 && bl > 0 && bl >= fl) {
-        const stops: number = Math.log2(Math.pow(bl / fl, 2.0));
+        const stops: number = bellowsStopAdjustment(fl, bl);
         setExposureComp("+ " + stops.toFixed(2) + " stop(s)");
       } else {
         setExposureComp("0 stops");
@@ -64,56 +74,72 @@ const ExposureCalculator = () => {
   }, [focalLength, bellowsLength, baseExposureSeconds, reciprocityCurve]);
 
   return (
-    <span className="exposure-calc-container">
-      <div className="exposure-calc">
-        <h3>Exposure Buddy</h3>
-        <p className="description">
-          Simple calculator for bellows exposure related calculations
-        </p>
-        <NumbericInput
-          label="Focal Length"
-          value={focalLength}
-          update={setFocalLength}
-        />
-
-        <NumbericInput
-          label="Bellows Length"
-          value={bellowsLength}
-          update={setBellowsLength}
-        />
-
-        <label>
-          Bellows Exposure Comp
-          <input type="text" value={exposureComp} disabled={true} />
-        </label>
-        <br />
-
-        <NumbericInput
-          label="Base Exposure (seconds)"
-          value={baseExposureSeconds}
-          update={setBaseExposureSecondes}
-        />
-
-        <label>
-          Reciprocity Curve
-          <select
-            value={reciprocityCurve}
-            onChange={(e) => setReciprocityCurve(e.target.value as Reciprocity)}
+    <Grid
+      textAlign="left"
+      centered={true}
+      style={{ height: "100vh" }}
+      verticalAlign="middle"
+    >
+      <Grid.Column style={{ maxWidth: 450 }}>
+        <Header as="h2" color="teal" textAlign="center">
+          Exposure Buddy
+          <HeaderSubheader
+            style={{ paddingLeft: "14px", paddingRight: "14px" }}
           >
-            {Object.keys(CurveDb).map((key, index) => (
-              <option value={key} key={key}>
-                {CurveDb[key as Reciprocity].name}
-              </option>
-            ))}
-          </select>
-        </label>
-        <br />
-        <label className="corrected-exposure">
-          Corrected Exposure
-          <input type="text" value={adjustedExposure} disabled={true} />
-        </label>
-      </div>
-    </span>
+            Simple calculator for bellows exposure related calculations
+          </HeaderSubheader>
+        </Header>
+        <Form size="large">
+          <Segment stacked>
+            <NumbericInput
+              label="Focal Length"
+              value={focalLength}
+              update={setFocalLength}
+            />
+
+            <NumbericInput
+              label="Bellows Length"
+              value={bellowsLength}
+              update={setBellowsLength}
+            />
+
+            <Message
+              // icon='inbox'
+              header="Bellows Exposure Comp"
+              content={<>{exposureComp}</>}
+              size="large"
+            />
+
+            <NumbericInput
+              label="Base Exposure (seconds)"
+              value={baseExposureSeconds}
+              update={setBaseExposureSecondes}
+            />
+            <Form.Field
+              label="Reciprocity Curve"
+              control="select"
+              value={reciprocityCurve}
+              onChange={(e: any) =>
+                setReciprocityCurve(e.target.value as Reciprocity)
+              }
+            >
+              {Object.keys(CurveDb).map((key, index) => (
+                <option value={key} key={key}>
+                  {CurveDb[key as Reciprocity].name}
+                </option>
+              ))}
+            </Form.Field>
+
+            <Message
+              // icon='inbox'
+              header="Corrected Exposure"
+              content={<>{adjustedExposure}</>}
+              size="large"
+            />
+          </Segment>
+        </Form>
+      </Grid.Column>
+    </Grid>
   );
 };
 
