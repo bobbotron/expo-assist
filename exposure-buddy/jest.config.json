@@ -1,0 +1,10 @@
+{
+  "verbose": true,
+  "coveragePathIgnorePatterns": [
+    "/node_modules",
+    "/src/**"
+  ],
+  "transform": {
+    "^.+\\.ts?$": "ts-jest"
+  }
+}
