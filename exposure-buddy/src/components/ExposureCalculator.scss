@@ -1,9 +1,9 @@
-.ui form.form div.field label {
-  font-size: 16px;
-}
-
-.ui form.form div.field input {
+.ui form.form div.field {
+  input,
+  select,
+  label {
     font-size: 16px;
+  }
 }
 
 div.expo-calc-component {
