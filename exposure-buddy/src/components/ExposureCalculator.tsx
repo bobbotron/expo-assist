@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import CurveDb from "../data/CurveDB";
 import Reciprocity from "../data/Reciprocity";
-import "./ExposureCalculator.css";
+import "./ExposureCalculator.scss";
 
 import {
   Form,
