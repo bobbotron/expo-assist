@@ -5,3 +5,8 @@
 .ui form.form div.field input {
     font-size: 16px;
 }
+
+div.expo-calc-component {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}

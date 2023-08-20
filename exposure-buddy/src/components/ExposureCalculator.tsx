@@ -74,72 +74,74 @@ const ExposureCalculator = () => {
   }, [focalLength, bellowsLength, baseExposureSeconds, reciprocityCurve]);
 
   return (
-    <Grid
-      textAlign="left"
-      centered={true}
-      style={{ height: "100vh" }}
-      verticalAlign="middle"
-    >
-      <Grid.Column style={{ maxWidth: 450 }}>
-        <Header as="h2" color="teal" textAlign="center">
-          Exposure Buddy
-          <HeaderSubheader
-            style={{ paddingLeft: "14px", paddingRight: "14px" }}
-          >
-            Simple calculator for bellows exposure related calculations
-          </HeaderSubheader>
-        </Header>
-        <Form size="large">
-          <Segment stacked>
-            <NumbericInput
-              label="Focal Length"
-              value={focalLength}
-              update={setFocalLength}
-            />
-
-            <NumbericInput
-              label="Bellows Length"
-              value={bellowsLength}
-              update={setBellowsLength}
-            />
-
-            <Message
-              // icon='inbox'
-              header="Bellows Exposure Comp"
-              content={<>{exposureComp}</>}
-              size="large"
-            />
-
-            <NumbericInput
-              label="Base Exposure (seconds)"
-              value={baseExposureSeconds}
-              update={setBaseExposureSecondes}
-            />
-            <Form.Field
-              label="Reciprocity Curve"
-              control="select"
-              value={reciprocityCurve}
-              onChange={(e: any) =>
-                setReciprocityCurve(e.target.value as Reciprocity)
-              }
+    <div className="expo-calc-component">
+      <Grid
+        textAlign="left"
+        centered={true}
+        style={{ height: "100vh" }}
+        verticalAlign="middle"
+      >
+        <Grid.Column style={{ maxWidth: 450 }}>
+          <Header as="h2" color="teal" textAlign="center">
+            Exposure Buddy
+            <HeaderSubheader
+              style={{ paddingLeft: "14px", paddingRight: "14px" }}
             >
-              {Object.keys(CurveDb).map((key, index) => (
-                <option value={key} key={key}>
-                  {CurveDb[key as Reciprocity].name}
-                </option>
-              ))}
-            </Form.Field>
+              Simple calculator for bellows exposure related calculations
+            </HeaderSubheader>
+          </Header>
+          <Form size="large">
+            <Segment stacked>
+              <NumbericInput
+                label="Focal Length"
+                value={focalLength}
+                update={setFocalLength}
+              />
 
-            <Message
-              // icon='inbox'
-              header="Corrected Exposure"
-              content={<>{adjustedExposure}</>}
-              size="large"
-            />
-          </Segment>
-        </Form>
-      </Grid.Column>
-    </Grid>
+              <NumbericInput
+                label="Bellows Length"
+                value={bellowsLength}
+                update={setBellowsLength}
+              />
+
+              <Message
+                // icon='inbox'
+                header="Bellows Exposure Comp"
+                content={<>{exposureComp}</>}
+                size="large"
+              />
+
+              <NumbericInput
+                label="Base Exposure (seconds)"
+                value={baseExposureSeconds}
+                update={setBaseExposureSecondes}
+              />
+              <Form.Field
+                label="Reciprocity Curve"
+                control="select"
+                value={reciprocityCurve}
+                onChange={(e: any) =>
+                  setReciprocityCurve(e.target.value as Reciprocity)
+                }
+              >
+                {Object.keys(CurveDb).map((key, index) => (
+                  <option value={key} key={key}>
+                    {CurveDb[key as Reciprocity].name}
+                  </option>
+                ))}
+              </Form.Field>
+
+              <Message
+                // icon='inbox'
+                header="Corrected Exposure"
+                content={<>{adjustedExposure}</>}
+                size="large"
+              />
+            </Segment>
+          </Form>
+        </Grid.Column>
+      </Grid>
+    </div>
   );
 };
 
