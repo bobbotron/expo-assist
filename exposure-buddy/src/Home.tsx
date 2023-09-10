@@ -3,8 +3,8 @@ import ExposureCalculator from "./components/ExposureCalculator";
 
 const Home: React.FC = () => (
   <>
-  <ExposureCalculator/>
-</>
+    <ExposureCalculator />
+  </>
 );
 
 export default Home;
