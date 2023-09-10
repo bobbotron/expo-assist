@@ -28,9 +28,10 @@ const validNumber = (val: string | undefined): boolean => {
 };
 
 const ExposureCalculator = () => {
-  const [focalLength, setFocalLength] = useState("");
-  const [bellowsLength, setBellowsLength] = useState("");
+  const [focalLength, setFocalLength] = useState("1");
+  const [bellowsLength, setBellowsLength] = useState("1");
   const [exposureComp, setExposureComp] = useState("");
+  const [filterStops, setFilterStops] = useState("0");
   const [baseExposureSeconds, setBaseExposureSecondes] = useState("");
   const [reciprocityCurve, setReciprocityCurve] = useState<Reciprocity>("none");
   const [adjustedExposure, setAdjustedExposure] = useState("-");
@@ -51,16 +52,33 @@ const ExposureCalculator = () => {
   }, [focalLength, bellowsLength]);
 
   useEffect(() => {
-    if ([focalLength, bellowsLength, baseExposureSeconds].every(validNumber)) {
+    if (!validNumber(filterStops)) {
+      setFilterStops("0");
+    } else {
+      const fil: number = Number(filterStops);
+      if (fil < 0) {
+        setFilterStops("0");
+      }
+    }
+  }, [filterStops]);
+
+  useEffect(() => {
+    if (
+      [focalLength, bellowsLength, baseExposureSeconds, filterStops].every(
+        validNumber
+      )
+    ) {
       const fl: number = Number(focalLength);
       const bl: number = Number(bellowsLength);
+      const fil: number = Number(filterStops);
       const seconds = parseFloat(baseExposureSeconds);
       const stops: number =
         fl > 0 && bl > 0 && bl >= fl ? Math.log2(Math.pow(bl / fl, 2.0)) : 0;
       const bellowsAdjustedSeconds = seconds * Math.pow(2, stops);
+      const filterAdjustedSeconds = bellowsAdjustedSeconds * Math.pow(2, fil);
       const curve = CurveDb[reciprocityCurve];
 
-      const totalAdjustedTime = curve.curve(bellowsAdjustedSeconds);
+      const totalAdjustedTime = curve.curve(filterAdjustedSeconds);
       const bellowsMinutes = Math.floor(totalAdjustedTime / 60);
       const bellowSeconds = totalAdjustedTime - bellowsMinutes * 60;
       setAdjustedExposure(
@@ -71,7 +89,13 @@ const ExposureCalculator = () => {
     } else {
       setAdjustedExposure("-");
     }
-  }, [focalLength, bellowsLength, baseExposureSeconds, reciprocityCurve]);
+  }, [
+    focalLength,
+    bellowsLength,
+    baseExposureSeconds,
+    filterStops,
+    reciprocityCurve,
+  ]);
 
   return (
     <div className="expo-calc-component">
@@ -110,7 +134,11 @@ const ExposureCalculator = () => {
                 content={<>{exposureComp}</>}
                 size="large"
               />
-
+              <NumbericInput
+                label="ND Filter Stops"
+                value={filterStops}
+                update={setFilterStops}
+              />
               <NumbericInput
                 label="Base Exposure (seconds)"
                 value={baseExposureSeconds}
