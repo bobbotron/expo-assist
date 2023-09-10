@@ -1,4 +1,4 @@
-import { Form } from "semantic-ui-react";
+import { Form, Icon } from "semantic-ui-react";
 
 interface NumericInputProps {
   label: string;
@@ -19,15 +19,14 @@ const NumbericInput: React.FC<NumericInputProps> = ({
       fluid
       label={label}
       labelPosition="left"
-      icon="sliders horizontal"
       iconPosition="left"
       placeholder={label}
       value={value}
-      inputmode="decimal"
-      pattern="[0-9]*"
-      type="text"
       onChange={onChangeHandler(update)}
-    />
+    >
+      <Icon name="sliders horizontal" />
+      <input inputMode="decimal" pattern="\d*" type="text" />
+    </Form.Input>
   </>
 );
 
