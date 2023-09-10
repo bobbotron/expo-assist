@@ -23,7 +23,9 @@ const NumbericInput: React.FC<NumericInputProps> = ({
       iconPosition="left"
       placeholder={label}
       value={value}
-      type="number"
+      inputmode="numeric"
+      pattern="[0-9]*"
+      type="text"
       onChange={onChangeHandler(update)}
     />
   </>
