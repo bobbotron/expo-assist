@@ -41,6 +41,16 @@ const CurveDb: {
     name: "Fuji Color 100",
     curve: (n: number): number => n * (0.5537 * Math.log10(n) + 1),
   },
+  trix: {
+    name: "Tri-X 320/400",
+    curve: (n: number): number =>
+      n * (2 * Math.pow(Math.log10(n), 2) + Math.log10(n) + 2),
+  },
+  tmax3200: {
+    name: "Tmax 3200",
+    curve: (n: number): number =>
+      n * ((7 / 6) * Math.pow(Math.log10(n), 2) - Math.log10(n) + 4 / 3),
+  },
   none: { name: "None", curve: (n: number): number => n },
 };
 
