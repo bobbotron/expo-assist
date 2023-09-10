@@ -1,16 +1,21 @@
 import React, { useState, useEffect } from "react";
 
-import CurveDb from "../data/CurveDB";
+import CurveDb, { calculateReciprocity } from "../data/CurveDB";
 import Reciprocity from "../data/Reciprocity";
 import "./ExposureCalculator.scss";
 
 import {
+  Accordion,
+  AccordionContent,
+  AccordionTitle,
   Form,
   Grid,
   Header,
   HeaderSubheader,
+  Icon,
   Message,
   Segment,
+  Table,
 } from "semantic-ui-react";
 import NumbericInput from "./NumericInput";
 import { bellowsStopAdjustment } from "../algorithms/BellowsMath";
@@ -35,6 +40,9 @@ const ExposureCalculator = () => {
   const [baseExposureSeconds, setBaseExposureSecondes] = useState("");
   const [reciprocityCurve, setReciprocityCurve] = useState<Reciprocity>("none");
   const [adjustedExposure, setAdjustedExposure] = useState("-");
+  const [reciprocityDetailExpanded, setReciprocityDetailExpanded] =
+    useState(false);
+  const [repoChartData, setRepoChartData] = useState([[0, ""]]);
 
   useEffect(() => {
     if (validNumber(focalLength) && validNumber(bellowsLength)) {
@@ -62,6 +70,16 @@ const ExposureCalculator = () => {
     }
   }, [filterStops]);
 
+  const createReadableTime = (n: number) => {
+    const minutes = Math.floor(n / 60);
+    const seconds = n - minutes * 60;
+
+    return (
+      (minutes > 0 ? minutes + " minutes, " : "") +
+      seconds.toFixed(2) +
+      " seconds"
+    );
+  };
   useEffect(() => {
     if (
       [focalLength, bellowsLength, baseExposureSeconds, filterStops].every(
@@ -76,16 +94,13 @@ const ExposureCalculator = () => {
         fl > 0 && bl > 0 && bl >= fl ? Math.log2(Math.pow(bl / fl, 2.0)) : 0;
       const bellowsAdjustedSeconds = seconds * Math.pow(2, stops);
       const filterAdjustedSeconds = bellowsAdjustedSeconds * Math.pow(2, fil);
-      const curve = CurveDb[reciprocityCurve];
 
-      const totalAdjustedTime = curve.curve(filterAdjustedSeconds);
-      const bellowsMinutes = Math.floor(totalAdjustedTime / 60);
-      const bellowSeconds = totalAdjustedTime - bellowsMinutes * 60;
-      setAdjustedExposure(
-        (bellowsMinutes > 0 ? bellowsMinutes + " minutes, " : "") +
-          bellowSeconds.toFixed(2) +
-          " seconds"
+      const totalAdjustedTime = calculateReciprocity(
+        reciprocityCurve,
+        filterAdjustedSeconds
       );
+
+      setAdjustedExposure(createReadableTime(totalAdjustedTime));
     } else {
       setAdjustedExposure("-");
     }
@@ -96,6 +111,15 @@ const ExposureCalculator = () => {
     filterStops,
     reciprocityCurve,
   ]);
+
+  useEffect(() => {
+    const repoData = [0, 1, 5, 10, 20, 60, 100].map((x) => [
+      x,
+      createReadableTime(calculateReciprocity(reciprocityCurve, x)),
+    ]);
+
+    setRepoChartData(repoData);
+  }, [reciprocityCurve]);
 
   return (
     <div className="expo-calc-component">
@@ -158,7 +182,37 @@ const ExposureCalculator = () => {
                   </option>
                 ))}
               </Form.Field>
+              <Accordion>
+                <AccordionTitle
+                  active={reciprocityDetailExpanded}
+                  onClick={() =>
+                    setReciprocityDetailExpanded(!reciprocityDetailExpanded)
+                  }
+                >
+                  <Icon name="dropdown" />
+                  {reciprocityDetailExpanded ? "Hide" : "Show"} reciprocity
+                  table
+                </AccordionTitle>
+                <AccordionContent active={reciprocityDetailExpanded}>
+                  <Table celled>
+                    <Table.Header>
+                      <Table.Row>
+                        <Table.HeaderCell>Seconds</Table.HeaderCell>
+                        <Table.HeaderCell>Adjusted Seconds</Table.HeaderCell>
+                      </Table.Row>
+                    </Table.Header>
 
+                    <Table.Body>
+                      {repoChartData.map((x) => (
+                        <Table.Row key={x[0]}>
+                          <Table.Cell>{x[0]}</Table.Cell>
+                          <Table.Cell>{x[1]}</Table.Cell>
+                        </Table.Row>
+                      ))}
+                    </Table.Body>
+                  </Table>
+                </AccordionContent>
+              </Accordion>
               <Message
                 // icon='inbox'
                 header="Corrected Exposure"
