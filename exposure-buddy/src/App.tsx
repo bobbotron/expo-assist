@@ -1,6 +1,7 @@
 import React, { lazy, Suspense } from "react";
 
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import EvCalculator from "./components/EvCalculator";
 const About = lazy(() => import("./About"));
 const Home = lazy(() => import("./Home"));
 
@@ -20,6 +21,7 @@ const App: React.FC = () => (
       <Routes>
         <Route path="/about" element={<About />} />
         <Route path="/" element={<Home />} />
+        <Route path="/exposure" element={<EvCalculator />} />
       </Routes>
     </Suspense>
   </Router>

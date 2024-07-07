@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import CurveDb, { calculateReciprocity } from "../data/CurveDB";
 import Reciprocity from "../data/Reciprocity";
-import "./ExposureCalculator.scss";
+import "./BellowsExposureCalculator.scss";
 
 import {
   Accordion,
