@@ -1,5 +1,5 @@
 import React from "react";
-import ExposureCalculator from "./components/ExposureCalculator";
+import ExposureCalculator from "./components/BellowsExposureCalculator";
 
 const Home: React.FC = () => (
   <>
