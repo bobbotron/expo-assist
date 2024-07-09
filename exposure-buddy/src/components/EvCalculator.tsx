@@ -66,7 +66,7 @@ const evValues = [
 ];
 
 const ISORange = Array.from({ length: 10 }, (value, key) => key).map(
-  (x, index) => 25 * Math.pow(2, x)
+  (x) => 25 * Math.pow(2, x)
 );
 const apertureRange =
   ", f/1, f/1.4, f/2, f/2.8, f/4, f/5.6, f/8, f/11, f/16, f/22".split(", ");
@@ -113,6 +113,9 @@ function shutterSpeedLookup(
   const apertureOffset = apertureRange.indexOf(aperture);
   const evOffset = evVal - 1 + Math.log2(isoVal / 25) - apertureOffset + 15;
   return shutterLookup[evOffset];
+  // Originally this method calculated shutter speed via math, but sadly there are some floating
+  // point issues with this, as opposed to a purely lookup table based solution.
+  // 
   // return (
   //   (aperture * aperture) /
   //   Math.pow(2, evVal + Math.log2(isoVal / 100.0))
@@ -203,7 +206,7 @@ const EvCalculator: React.FC = () => {
           </Form>
           {tableData && tableData.length > 1 && (
             <>
-              <Table>
+              <Table unstackable={true}>
                 <Table.Header>
                   <Table.Row>
                     {tableData[0] &&
