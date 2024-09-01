@@ -131,7 +131,7 @@ const ExposureCalculator = () => {
       >
         <Grid.Column style={{ maxWidth: 450 }}>
           <Header as="h2" color="teal" textAlign="center">
-            Exposure Buddy
+            Bellows Calculator
             <HeaderSubheader
               style={{ paddingLeft: "14px", paddingRight: "14px" }}
             >
