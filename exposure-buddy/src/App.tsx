@@ -2,22 +2,14 @@ import React, { lazy, Suspense } from "react";
 
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import EvCalculator from "./components/EvCalculator";
+import TopMenu from "./components/TopMenu";
 const About = lazy(() => import("./About"));
 const Home = lazy(() => import("./Home"));
 
 const App: React.FC = () => (
   <Router>
     <Suspense fallback={<div>Loading...</div>}>
-      {/* <nav>
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/about">About</Link>
-          </li>
-        </ul>
-      </nav> */}
+      <TopMenu />
       <Routes>
         <Route path="/about" element={<About />} />
         <Route path="/" element={<Home />} />
